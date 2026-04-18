@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Insight Flow</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+  window.onload = function () {
+    const intro = document.getElementById("introScreen");
+
+    if (intro) {
+      setTimeout(() => {
+        intro.style.opacity = "0";
+
+        setTimeout(() => {
+          intro.style.display = "none";
+        }, 1000);
+
+      }, 3000);
+    }
+  };
+</script>
+</head>
+<body>
+<div id="introScreen">
+  
+  <h1 class="logo">InsightFlow</h1>
+  <p class="tagline">An AI Powered Review Platform</p>
+  <div id="introScreen" onclick="this.remove()"></div>
+</div>
+<div class="container">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>INSIGHT FLOW</h2>
+    <ul>
+      <li onclick="showSection('upload')">Upload</li>
+      <li onclick="showSection('dashboard')">Dashboard</li>
+      <li onclick="showSection('reviews')">Reviews</li>
+      <li onclick="showSection('trend')">Trend</li>
+      <li onclick="showSection('comparison')">Comparison</li>
+    </ul>
+
+    <div class="dataset">
+      <p>Total Reviews: <span id="totalReviews">0</span></p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <div class="top-bar">
+  <button class="api-btn" onclick="connectAPI()">🔌 Connect API</button><br><br>
+  
+</div>
+
+    <!-- Upload Section -->
+    <div id="output" style="margin-top:20px; background:white; padding:15px;"></div>
+    <div id="upload" class="section active">
+  <h1>Dataset Upload</h1>
+  <p class="subtitle">
+    Upload your product reviews CSV for instant sentiment analysis and insights.
+  </p>
+
+  <!-- Upload Box -->
+  <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+    <input type="file" id="fileInput" accept=".csv,.json" hidden>
+
+    <div class="upload-content">
+      <div class="upload-icon">⬆️</div>
+      <h3>Drag & drop your CSV here</h3>
+      <p>or click to browse from your computer</p>
+    </div>
+  </div>
+
+  <!-- Manual Input -->
+  <textarea id="manualInput" placeholder="Paste manual reviews here..."></textarea>
+
+  <button onclick="processData()">Process</button>
+
+  <!-- Feature Cards -->
+  <div class="cards">
+
+  <div class="card">
+    <h3>📊 Feature Sentiment</h3>
+    <canvas id="miniBar"></canvas>
+  </div>
+
+  <div class="card">
+    <h3>📈 Trend Detection</h3>
+    <canvas id="miniTrend"></canvas>
+  </div>
+
+  <div class="card">
+    <h3>🔔 Smart Alerts</h3>
+    <p id="alertText">No issues detected</p>
+  </div>
+
+</div>
+
+</div>
+
+    <!-- Other Sections -->
+    <div id="dashboard" class="section"><h1>Dashboard</h1></div>
+    <div id="reviews" class="section">
+  <h1>Reviews</h1>
+  <input type="text" id="searchInput" class="search-bar" placeholder="Search..." onkeyup="filterReviews()">
+  
+  <div id="reviewsContainer"></div> 
+
+  <table class="review-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Review</th>
+        <th>Label</th>
+        <th>Confidence</th>
+        <th>Product</th>
+      </tr>
+    </thead>
+    <tbody id="reviewTableBody"></tbody>
+  </table>
+</div>
+    <div id="trend" class="section">
+
+  <h1>📈 Trend Detection</h1>
+  <p class="subtitle">Monitor sentiment trends across products</p>
+
+  <!-- FILTER -->
+  <select id="productFilter" class="filter" onchange="filterTrend()">
+    <option value="All">All Products (Company View)</option>
+  </select>
+
+  <!-- CHART -->
+  <div class="chart-card">
+    <canvas id="trendChart"></canvas>
+  </div>
+
+</div>
+    <div id="comparison" class="section">
+  <h1>📊 Product Comparison</h1>
+
+  <h3>Select number of products</h3>
+  <div id="numberButtons"></div>
+
+  <h3>Select products</h3>
+  <div id="productButtons"></div>
+
+  <button onclick="runComparison()">Compare</button>
+
+  <div id="comparisonCharts" class="charts-grid"></div>
+</div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>  
